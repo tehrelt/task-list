@@ -6,6 +6,8 @@ import { PlusIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { ScrollArea } from "./ui/scroll-area";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { TaskCreateModal } from "@/widgets/task-create-modal";
 
 interface Props {
   status: TaskStatus;
@@ -13,20 +15,14 @@ interface Props {
 }
 
 export const TaskStatusColumn = ({ status, className }: Props) => {
-  const { tasks, create: createTask } = useTaskStore();
+  const { tasks } = useTaskStore();
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
 
   const categoryTasks = tasks.filter((t) => t.status === status);
 
   const handleCreate = () => {
-    createTask({
-      id: tasks.length + 1,
-      title: `New Task ${tasks.length + 1}`,
-      description: "",
-      status: status,
-      priority: "low",
-      category: "bug",
-    });
+    setOpen(true);
   };
 
   return (
@@ -41,6 +37,11 @@ export const TaskStatusColumn = ({ status, className }: Props) => {
           >
             <PlusIcon className="w-4 h-4" />
           </Button>
+          <TaskCreateModal
+            open={open}
+            onOpenChange={setOpen}
+            initialData={{ status }}
+          />
         </div>
         <ScrollArea className="flex flex-col  max-h-96">
           <div className="flex flex-col gap-y-2">
