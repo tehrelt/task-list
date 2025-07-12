@@ -1,10 +1,10 @@
 import type { TaskStatus } from "@/entities/task";
 import { useTaskStore } from "@/store/tasks";
 import { TaskItem } from "./task-item";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import { PlusIcon } from "lucide-react";
-import { Button } from "./ui/button";
-import { ScrollArea } from "./ui/scroll-area";
+import { Button } from "@/shared/ui/button";
+import { ScrollArea } from "@/shared/ui/scroll-area";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { TaskCreateModal } from "@/widgets/task-create-modal";

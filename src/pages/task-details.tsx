@@ -1,4 +1,4 @@
-import { TaskDetails } from "@/components/task-details";
+import { TaskDetails } from "@/widgets/task-details";
 import { useParams } from "react-router-dom";
 
 export const TaskDetailsPage = () => {

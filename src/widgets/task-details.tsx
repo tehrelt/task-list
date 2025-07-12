@@ -1,15 +1,15 @@
-import { useTask } from "@/lib/hooks/use-task";
+import { useTask } from "@/shared/hooks/use-task";
 import { useTaskStore } from "@/store/tasks";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Label } from "./ui/label";
+import { Input } from "@/shared/ui/input";
+import { Textarea } from "@/shared/ui/textarea";
+import { Label } from "@/shared/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@/shared/ui/select";
 import {
   taskStatuses,
   taskPriorities,
@@ -20,9 +20,9 @@ import {
 } from "@/entities/task";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, Trash } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/shared/ui/button";
 import { Link } from "react-router-dom";
-import { datef } from "@/lib/utils";
+import { datef } from "@/shared/lib/utils";
 
 interface Props {
   id: number;

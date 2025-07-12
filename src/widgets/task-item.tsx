@@ -1,7 +1,7 @@
 import { taskStatuses, type Task } from "@/entities/task";
-import { Button } from "./ui/button";
+import { Button } from "@/shared/ui/button";
 import { useTaskStore } from "@/store/tasks";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import { ArrowLeft, ArrowRight, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
 

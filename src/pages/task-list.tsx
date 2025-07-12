@@ -1,4 +1,4 @@
-import { TaskList } from "@/components/task-list";
+import { TaskList } from "@/widgets/task-list";
 
 export const TaskListPage = () => {
   return (
