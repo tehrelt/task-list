@@ -1,4 +1,4 @@
-import type { Task } from "@/entities/task";
+import type { Task, TaskCreate } from "@/entities/task";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
@@ -7,7 +7,7 @@ interface TasksState {
 }
 
 interface TasksAction {
-  create: (task: Omit<Task, "createdAt" | "updatedAt">) => void;
+  create: (task: TaskCreate) => void;
   update: (task: Task) => void;
   delete: (task: Task) => void;
 }
@@ -23,7 +23,12 @@ export const useTaskStore = create<TaskStore>()(
           set((state) => ({
             tasks: [
               ...state.tasks,
-              { ...task, createdAt: new Date(), updatedAt: new Date() },
+              {
+                ...task,
+                id: state.tasks.length + 1,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              },
             ],
           })),
         update: (task) =>

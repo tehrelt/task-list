@@ -13,10 +13,10 @@ import {
 import {
   taskStatuses,
   taskPriorities,
-  type TaskPriority,
-  type TaskStatus,
-  type TaskCategory,
   taskCategories,
+  type TaskStatus,
+  type TaskPriority,
+  type TaskCategory,
 } from "@/entities/task";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, Trash } from "lucide-react";
@@ -81,7 +81,7 @@ export const TaskDetails = ({ id }: Props) => {
             </SelectTrigger>
 
             <SelectContent>
-              {taskStatuses.map((status) => (
+              {Object.values(taskStatuses.enum).map((status) => (
                 <SelectItem key={status} value={status}>
                   {t(status)}
                 </SelectItem>
@@ -104,7 +104,7 @@ export const TaskDetails = ({ id }: Props) => {
             </SelectTrigger>
 
             <SelectContent>
-              {taskPriorities.map((priority) => (
+              {Object.values(taskPriorities.enum).map((priority) => (
                 <SelectItem key={priority} value={priority}>
                   {t(priority)}
                 </SelectItem>
@@ -127,7 +127,7 @@ export const TaskDetails = ({ id }: Props) => {
             </SelectTrigger>
 
             <SelectContent>
-              {taskCategories.map((category) => (
+              {Object.values(taskCategories.enum).map((category) => (
                 <SelectItem key={category} value={category}>
                   {t(category)}
                 </SelectItem>
@@ -140,7 +140,7 @@ export const TaskDetails = ({ id }: Props) => {
       <div className="flex justify-between text-muted-foreground">
         <div className="flex items-center gap-2">
           <Label htmlFor="createdAt">Created:</Label>
-          <div>{datef(task.createdAt)}</div>
+          <div>{datef(task.createdAt!)}</div>
         </div>
         <div className="flex items-center gap-2">
           <Label htmlFor="updatedAt">Updated:</Label>

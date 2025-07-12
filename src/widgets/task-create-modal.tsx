@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -21,13 +20,21 @@ import {
   taskPriorities,
   taskStatuses,
   type Task,
-  type TaskCategory,
-  type TaskPriority,
-  type TaskStatus,
+  type TaskCreate,
+  taskCreateSchema,
 } from "@/entities/task";
 import { useTaskStore } from "@/store/tasks";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface Props {
   open: boolean;
@@ -37,19 +44,19 @@ interface Props {
 
 export const TaskCreateModal = ({ open, onOpenChange, initialData }: Props) => {
   const { t } = useTranslation();
-  const { create: createTask, tasks } = useTaskStore();
+  const { create: createTask } = useTaskStore();
 
-  const [task, setTask] = useState<Partial<Task> | undefined>(initialData);
+  const form = useForm<TaskCreate>({
+    defaultValues: {
+      ...initialData,
+    },
+    resolver: zodResolver(taskCreateSchema),
+  });
 
-  const handleSubmit = () => {
-    if (task) {
-      createTask({
-        ...task,
-        id: tasks.length + 1,
-      });
-
-      onOpenChange(false);
-    }
+  const handleSubmit = (data: TaskCreate) => {
+    createTask(data);
+    onOpenChange(false);
+    form.reset();
   };
 
   return (
@@ -59,91 +66,126 @@ export const TaskCreateModal = ({ open, onOpenChange, initialData }: Props) => {
           <DialogTitle>{t("Create Task")}</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-y-1">
-          <Label htmlFor="title">{t("Title")}</Label>
-          <Input
-            id="title"
-            value={task?.title}
-            onChange={(e) => setTask({ ...task, title: e.target.value })}
-          />
-        </div>
-
-        <div className="flex flex-col gap-y-1">
-          <Label htmlFor="description">{t("Description")}</Label>
-          <Textarea
-            id="description"
-            value={task?.description}
-            onChange={(e) => setTask({ ...task, description: e.target.value })}
-          />
-        </div>
-
-        <div className="flex items-center gap-x-2">
-          <Label htmlFor="status">{t("Status")}</Label>
-          <Select
-            name="status"
-            value={task?.status}
-            onValueChange={(value: TaskStatus) =>
-              setTask({ ...task, status: value })
-            }
+        <Form {...form}>
+          <form
+            id="task-create-form"
+            onSubmit={form.handleSubmit(handleSubmit)}
           >
-            <SelectTrigger>
-              <SelectValue placeholder={t("Select Status")} />
-            </SelectTrigger>
-            <SelectContent>
-              {taskStatuses.map((status) => (
-                <SelectItem key={status} value={status}>
-                  {t(status)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center gap-x-2">
-          <Label htmlFor="priority">{t("Priority")}</Label>
-          <Select
-            name="priority"
-            value={task?.priority}
-            onValueChange={(value: TaskPriority) =>
-              setTask({ ...task, priority: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder={t("Select Priority")} />
-            </SelectTrigger>
-            <SelectContent>
-              {taskPriorities.map((priority) => (
-                <SelectItem key={priority} value={priority}>
-                  {t(priority)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("Title")}</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div className="flex items-center gap-x-2">
-          <Label htmlFor="category">{t("Category")}</Label>
-          <Select
-            name="category"
-            value={task?.category}
-            onValueChange={(value: TaskCategory) =>
-              setTask({ ...task, category: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder={t("Select Category")} />
-            </SelectTrigger>
-            <SelectContent>
-              {taskCategories.map((category) => (
-                <SelectItem key={category} value={category}>
-                  {t(category)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("Description")}</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("Status")}</FormLabel>
+                    <FormControl>
+                      <Select {...field} onValueChange={field.onChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("Select Status")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(taskStatuses.enum).map((status) => (
+                            <SelectItem key={status} value={status}>
+                              {t(status)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("Priority")}</FormLabel>
+                    <FormControl>
+                      <Select {...field} onValueChange={field.onChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("Select Priority")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(taskPriorities.enum).map(
+                            (priority) => (
+                              <SelectItem key={priority} value={priority}>
+                                {t(priority)}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("Category")}</FormLabel>
+                    <FormControl>
+                      <Select {...field} onValueChange={field.onChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("Select Category")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.values(taskCategories.enum).map(
+                            (category) => (
+                              <SelectItem key={category} value={category}>
+                                {t(category)}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </form>
+        </Form>
 
         <DialogFooter>
-          <Button onClick={handleSubmit}>{t("Save")}</Button>
+          <Button type="submit" form="task-create-form">
+            {t("Save")}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -8,9 +8,17 @@ function App() {
     resources: {
       en: {
         translation: {
-          todo: "Todo",
+          todo: "To-Do",
           "in-progress": "In Progress",
           done: "Done",
+          low: "Low",
+          medium: "Medium",
+          high: "High",
+          bug: "Bug",
+          feature: "Feature",
+          documentation: "Documentation",
+          refactor: "Refactor",
+          test: "Test",
         },
       },
     },

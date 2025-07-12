@@ -18,11 +18,10 @@ export const TaskItem = ({ task }: Props) => {
 
   const handleMove = (direction: "left" | "right") => {
     const shift = direction === "left" ? -1 : 1;
-    const currentIndex = taskStatuses.indexOf(task.status);
+    const currentIndex = Object.values(taskStatuses.enum).indexOf(task.status);
     const newIndex = currentIndex + shift;
-    const newStatus = taskStatuses[newIndex];
-    task.status = newStatus;
-    updateTask(task);
+    const newStatus = Object.values(taskStatuses.enum)[newIndex];
+    updateTask({ ...task, status: newStatus });
   };
 
   return (
@@ -57,7 +56,7 @@ export const TaskItem = ({ task }: Props) => {
       </div>
 
       <div className="flex justify-between gap-2">
-        {task.status !== "todo" && (
+        {task.status !== "todo" ? (
           <Button
             variant="ghost"
             className="cursor-pointer"
@@ -65,11 +64,13 @@ export const TaskItem = ({ task }: Props) => {
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
+        ) : (
+          <div></div>
         )}
         {task.status !== "done" && (
           <Button
             variant="ghost"
-            className="cursor-pointer"
+            className="cursor-pointer "
             onClick={() => handleMove("right")}
           >
             <ArrowRight className="w-4 h-4" />
