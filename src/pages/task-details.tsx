@@ -1,4 +1,12 @@
+import { TaskDetails } from "@/components/task-details";
+import { useParams } from "react-router-dom";
 
 export const TaskDetailsPage = () => {
-  return <div></div>;
+  const { id } = useParams();
+
+  return (
+    <div className="flex justify-center">
+      <TaskDetails id={Number(id)} />
+    </div>
+  );
 };

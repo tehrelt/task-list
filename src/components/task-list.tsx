@@ -1,19 +1,14 @@
-import { useTaskStore } from "@/store/tasks";
-import { TaskItem } from "./task-item";
+import { TaskStatusColumn } from "./task-category";
+import { taskStatuses } from "@/entities/task";
 
 export const TaskList = () => {
-  const { tasks, create, update, delete: deleteTask } = useTaskStore();
-
   return (
     <div>
-      <h1>Task List</h1>
-      <But
-
-      <ul>
-        {tasks.map((task) => (
-          <TaskItem key={task.id} task={task} />
+      <div className="flex flex-col md:flex-row gap-4">
+        {taskStatuses.map((status) => (
+          <TaskStatusColumn key={status} status={status} className="flex-1" />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

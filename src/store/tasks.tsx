@@ -7,7 +7,7 @@ interface TasksState {
 }
 
 interface TasksAction {
-  create: (task: Task) => void;
+  create: (task: Omit<Task, "createdAt" | "updatedAt">) => void;
   update: (task: Task) => void;
   delete: (task: Task) => void;
 }
@@ -19,10 +19,18 @@ export const useTaskStore = create<TaskStore>()(
     persist(
       (set) => ({
         tasks: [],
-        create: (task) => set((state) => ({ tasks: [...state.tasks, task] })),
+        create: (task) =>
+          set((state) => ({
+            tasks: [
+              ...state.tasks,
+              { ...task, createdAt: new Date(), updatedAt: new Date() },
+            ],
+          })),
         update: (task) =>
           set((state) => ({
-            tasks: state.tasks.map((t) => (t.id === task.id ? task : t)),
+            tasks: state.tasks.map((t) =>
+              t.id === task.id ? { ...task, updatedAt: new Date() } : t
+            ),
           })),
         delete: (task) =>
           set((state) => ({
