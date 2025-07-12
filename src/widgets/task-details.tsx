@@ -34,7 +34,7 @@ export const TaskDetails = ({ id }: Props) => {
   const { update: updateTask, delete: deleteTask } = useTaskStore();
 
   return (
-    <div className="border rounded-md p-4 w-1/2 space-y-4">
+    <div className="border rounded-md p-4 w-full md:w-1/2 space-y-4">
       <div className="flex justify-between">
         <Link to="/" className="flex items-center gap-2 hover:underline">
           <ArrowLeft className="w-4 h-4" />
@@ -137,7 +137,7 @@ export const TaskDetails = ({ id }: Props) => {
         </div>
       </div>
 
-      <div className="flex justify-between text-muted-foreground">
+      <div className="flex flex-col md:flex-row justify-between text-muted-foreground">
         <div className="flex items-center gap-2">
           <Label htmlFor="createdAt">Created:</Label>
           <div>{datef(task.createdAt!)}</div>
