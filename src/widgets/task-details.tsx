@@ -21,7 +21,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, Trash } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { datef } from "@/shared/lib/utils";
 
 interface Props {
@@ -32,6 +32,12 @@ export const TaskDetails = ({ id }: Props) => {
   const task = useTask(id);
   const { t } = useTranslation();
   const { update: updateTask, delete: deleteTask } = useTaskStore();
+  const navigate = useNavigate();
+
+  const handleDelete = () => {
+    deleteTask(task);
+    navigate("/");
+  };
 
   return (
     <div className="border rounded-md p-4 w-full md:w-1/2 space-y-4">
@@ -40,7 +46,7 @@ export const TaskDetails = ({ id }: Props) => {
           <ArrowLeft className="w-4 h-4" />
           <span>Back</span>
         </Link>
-        <Button variant="ghost" onClick={() => deleteTask(task)}>
+        <Button variant="ghost" onClick={handleDelete}>
           <Trash className="w-4 h-4 text-red-500 hover:text-red-500/60" />
         </Button>
       </div>
